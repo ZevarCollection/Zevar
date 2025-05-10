@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ZEVAR COLLECTION - Jewellery Price Calculator</title>
+  <title>Zevar Collection - Jewellery Price Calculator</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -14,7 +14,7 @@
     }
 
     .calculator {
-      max-width: 400px;
+      max-width: 420px;
       margin: auto;
       background: #ffffff;
       border-radius: 16px;
@@ -26,6 +26,7 @@
       text-align: center;
       margin-bottom: 20px;
       color: #d4af37;
+      font-size: 24px;
     }
 
     .tabs {
@@ -42,6 +43,7 @@
       cursor: pointer;
       background: #eee;
       font-weight: bold;
+      transition: background 0.3s ease;
     }
 
     .tab.active.gold {
@@ -80,6 +82,7 @@
       font-weight: bold;
       border-radius: 12px;
       cursor: pointer;
+      margin-top: 10px;
     }
 
     .price-breakdown {
@@ -124,11 +127,11 @@
     <div id="form">
       <div class="form-group">
         <label>Live Rate (per 10g)</label>
-        <input type="number" id="rate" placeholder="Enter rate per 10 grams" />
+        <input type="number" id="rate" placeholder="e.g., 65000" min="0"/>
       </div>
       <div class="form-group">
         <label>Net Weight (g)</label>
-        <input type="number" id="weight" placeholder="Enter weight in grams" />
+        <input type="number" id="weight" placeholder="e.g., 5" min="0"/>
       </div>
       <div class="form-group">
         <label>Making Charges</label>
@@ -145,7 +148,7 @@
       </div>
       <div class="form-group">
         <label>Discount on Making Charges (%)</label>
-        <input type="number" id="discount" value="0" />
+        <input type="number" id="discount" value="0" min="0" max="100"/>
       </div>
       <button class="button" onclick="calculate()">Calculate Price</button>
     </div>
@@ -171,12 +174,10 @@
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
       document.querySelector(`.tab.${type}`).classList.add('active');
 
-      // Toggle background
       document.body.style.background = type === 'gold'
         ? 'linear-gradient(to right, #fff8e1, #fffde7)'
         : 'linear-gradient(to right, #e0e0e0, #f5f5f5)';
 
-      // Toggle making charge dropdowns
       document.getElementById("goldMaking").style.display = type === 'gold' ? 'block' : 'none';
       document.getElementById("silverMaking").style.display = type === 'silver' ? 'block' : 'none';
     }
@@ -189,8 +190,8 @@
         : parseFloat(document.getElementById("silverMaking").value);
       const discountPercent = parseFloat(document.getElementById("discount").value);
 
-      if (!rate10g || !weight) {
-        alert("Please fill all fields.");
+      if (!rate10g || !weight || rate10g <= 0 || weight <= 0) {
+        alert("Please enter valid Rate and Weight.");
         return;
       }
 
